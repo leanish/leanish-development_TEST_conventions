@@ -30,3 +30,16 @@ Claude's networked review and adoption. See every VERIFY item in EXPECTED.md.
   checksum above; the release was built 2026-01-29 and is aged.
 - These baseline results supersede the earlier unverified status. Selected update
   heads and real weekly tool/gate runs still require verification.
+
+## Fixture fixes 1–5 — 2026-10-10
+
+- Added **/.kotlin/ to .gitignore. No generated Kotlin error logs were present
+  in the local baseline; the already-published PR logs were not modified.
+- README now points to EXPECTED.md for all expectations. EXPECTED records
+  deferred-major limits, complete evidence requirements and conditional B1/B2/B3
+  behavior at the v0.2.2/v0.2.3 boundary; workflow pins remain unchanged.
+- Actual gate readSettings/parser and YAML parsing accept all policies/workflows.
+- Retried Gradle 9.3.1 offline check on daemon JDK 21 with isolated repository-local
+  caches and temp files. Startup failed at FileLockContentionHandler with
+  java.net.SocketException: Operation not permitted. No build/resolution pass is
+  claimed; see .validation/fixture-fixes/gradle-check.log.
