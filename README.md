@@ -15,4 +15,5 @@ plugin's libraries without additional consumer declarations.
 acceptance steps, timing caveats and VERIFY items. [VALIDATION.md](VALIDATION.md)
 records checks already performed. These private repositories are test inputs;
 do not publish packages. Claude manages GitHub adoption and weekly configuration.
-The existing gate workflow remains pinned to supply-chain v0.2.2.
+Gate adoption uses the same supply-chain commit for inventory and comparison;
+see EXPECTED.md for the prerelease pin and released v0.3.0 acceptance.
