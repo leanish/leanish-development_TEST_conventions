@@ -5,7 +5,7 @@ plugins {
 
 group = "io.github.leanish.tests"
 version = "1.0.0"
-description = "Synthetic convention consumer for supply-chain weekly runs."
+description = "Synthetic convention consumer for supply-chain end-to-end runs."
 
 java {
     toolchain {

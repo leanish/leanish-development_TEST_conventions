@@ -1,4 +1,18 @@
-# Local validation — 2026-10-09
+# Validation
+
+Each record below states how far its evidence goes:
+
+- **seed/probe verified**: the seed, or a local probe of it, was checked; no tool ran.
+- **real tool run verified**: a real secure-it or bump-it run produced it.
+
+| Record | Date | Evidence state | Tool version | PRs / heads |
+|---|---|---|---|---|
+| Local validation | 2026-10-09 | seed/probe verified (static checks only; Gradle couldn't start in the sandbox) | not recorded | none |
+| Claude networked review | 2026-10-09 | seed/probe verified (baseline check passed on JDK 21) | none | none |
+| Fixture fixes 1–5 | 2026-10-10 | seed/probe verified (static checks; no Gradle run) | not recorded | none |
+| Tool branches | 2026-10-10 to 2026-10-12 | real tool run verified (branch contents only) | not recorded | see below |
+
+## Local validation — 2026-10-09
 
 - YAML parsed with the gate checkout's yaml library; workflow events verified.
 - .github/supply-chain.json accepted by the gate's actual readSettings/parser.
@@ -38,8 +52,30 @@ Claude's networked review and adoption. See every VERIFY item in EXPECTED.md.
 - README now points to EXPECTED.md for all expectations. EXPECTED records
   deferred-major limits, complete evidence requirements and conditional B1/B2/B3
   behavior at the v0.2.2/v0.2.3 boundary; workflow pins remain unchanged.
+  (Historical: 0.3.0 replaced that mechanism with the plan-applied Gradle reference,
+  and v0.2.3 was never released. EXPECTED.md now describes the reference.)
 - Actual gate readSettings/parser and YAML parsing accept all policies/workflows.
 - Retried Gradle 9.3.1 offline check on daemon JDK 21 with isolated repository-local
   caches and temp files. Startup failed at FileLockContentionHandler with
   java.net.SocketException: Operation not permitted. No build/resolution pass is
   claimed; see .validation/fixture-fixes/gradle-check.log.
+
+## Tool branches — fetched 2026-10-12
+
+Real tool branches, read from this clone's remote-tracking refs. Only their
+contents are evidence here: PR numbers, tool versions and CI results aren't recorded.
+
+- `secure-it/2026-10-10-security` (changes 8c68df0 and cb11812 on 2026-10-10, head
+  8b5d649): security floors, each with a because-declaration and a record, for
+  plexus-utils 3.6.1 (`:checkstyle`, GHSA-6fmv-xxpf-w3cw), Guava 33.7.2-jre
+  (`:annotationProcessor`, `:checkstyle`, `:testAnnotationProcessor`,
+  GHSA-xxph-c9ww-hj94) and Commons Lang 3.18.0 (`:checkstyle`, GHSA-j288-q9x7-2f5v).
+  The Checkstyle floors sit in a `checkstyleSecurityFloors` configuration that
+  `checkstyle` extends. These changes predate the 0.3.0 release.
+- `bump-it/2026-10-10-routine` (head 6ff3f6e, 2026-10-12): wrapper 9.3.1 -> 9.8.0
+  (case 6), checkout v4.1.1 -> v4.4.0 and setup-java v4.2.1 -> v4.9.1 (case 8), and
+  the gate pin v0.4.0 -> v0.4.2.
+- java-conventions major branch (head c84745a): the plugin marker 0.3.1 -> 0.6.0 on
+  2026-10-10, then 0.6.2 on 2026-10-11, in its own branch rather than the routine (case 1).
+- `bump-it/2026-10-10-actions-checkout-major` (checkout v7.0.1) and
+  `bump-it/2026-10-10-actions-setup-java-major` (setup-java v6.0.1).

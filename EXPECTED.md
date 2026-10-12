@@ -6,7 +6,7 @@ seed files; line numbers naturally move after a tool edits them.
 
 | Case | File/line | bump-it | secure-it | Gate |
 |---|---|---|---|---|
-| 1: pluginManagement | `settings.gradle.kts:7` | Routine plugin-marker update 0.3.1 -> highest eligible 0.x; separate major if an eligible >=1 line exists. Edit the settings declaration, not invented consumer dependency versions. | Old plugin/tool advisories are live; may require additional security PRs/floors. | Exact marker must resolve at target on the settings/buildscript classpath; changed injected modules still face age/advisory checks. |
+| 1: pluginManagement | `settings.gradle.kts:7` | Routine plugin-marker update 0.3.1 -> highest eligible 0.3.x (a 0.x version's line is its first two numbers); a newer line, such as 0.6, gets its own major PR. Edit the settings declaration, not invented consumer dependency versions. | Old plugin/tool advisories are live; may require additional security PRs/floors. | Exact marker must resolve at target on the settings/buildscript classpath; changed injected modules still face age/advisory checks. |
 | 1/5: injected libraries | build.gradle.kts plugin application; consumer tests | Dependencies absent from Gradle source coordinate evidence remain notes, never independent bump moves. A planned convention-plugin update may change them through the reference graph. | Scan injected modules. For a vulnerable plugin-declared module, search eligible source-named dependency parents first; without one, add an explicit because floor plus its record alongside the plugin's declaration. Do not edit a declaration the consumer sources do not hold. | Head must match the plan-applied Gradle reference. Added/removed/changed injected modules are accepted only as faithful reference fallout and still face advisory/age checks. |
 
 Acceptance: capture base and updated `gradle-head` inventories. Require the plugin
@@ -14,9 +14,10 @@ marker to land at the plan target and check that any changed injected versions
 occur only under that same planned plugin build. Tests pass using the plugin's
 injected JUnit/AssertJ without manually declaring or pinning either library.
 If the selected plugin target has identical injected versions, that run proves
-notes/planning but not the changed-version exemption; record the gap instead of
-claiming the exemption was exercised. A deliberately unrelated Java change is
-outside a routine plan, so do not attach formatting repairs to that PR.
+notes/planning but not that changed injected versions match the plan-applied
+reference; record the gap instead of claiming that path was exercised. A
+deliberately unrelated Java change is outside a routine plan, so do not attach
+formatting repairs to that PR.
 
 Default-branch scan may initially FAIL due to old injected tools; capture the full
 finding set. PR compare should PASS if changes add no findings and inherited ones
@@ -41,7 +42,7 @@ file-lock coordination socket; target builds remain unverified.
 
 | Case | File/line | bump-it | secure-it | Gate |
 |---|---|---|---|---|
-| Gate adoption | `.github/workflows/supply-chain.yml:22` | Own Action update may join routine/major according to release line; repin before trials. | Only if an advisory has a selected fix. | Daily scan, PR compare, open-PR rescan; require supply-chain and cooldown after repin. |
+| Gate adoption | `.github/workflows/supply-chain.yml:15` | Own Action update may join routine/major according to release line; repin before trials. | Only if an advisory has a selected fix. | PR compare; default-branch scan on push to main and manual dispatch. No schedule (removed 2026-10-12) and no open-PR rescan (removed in gate 0.4.0). Require supply-chain and cooldown. |
 | 8: checkout pin | `.github/workflows/ci.yml:16` | Routine: highest eligible v4 release and matching commit/comment; separate major for highest eligible newer line. | No fixed security expectation; live advisories decide. | Changed SHA must match its full release tag comment and aged release; otherwise FAIL. |
 | 8: Java setup pin | `.github/workflows/ci.yml:19` | Routine v4 refresh and separate newer-major PR when eligible; preserve JDK 25 input. | Live advisories decide. | Same SHA/tag/age checks. |
 
@@ -55,8 +56,10 @@ source or provenance breaks can block an otherwise safe version.
 
 Gate trials use the same supply-chain commit for inventory and comparison.
 The gate is pinned to supply-chain v0.4.0
-(1c236638041cc479ac067b2a4b6143f0e6c2bace, 2026-10-11), which scans only the default branch
-daily and no longer rescans open PRs. Earlier trials used v0.3.0
+(1c236638041cc479ac067b2a4b6143f0e6c2bace, 2026-10-11). It runs on pull requests,
+pushes to main and manual dispatch. It has no schedule (removed 2026-10-12) and,
+since v0.4.0, no open-PR rescan. The tools are at v0.4.2; tool-only releases don't
+need a gate repin. Earlier trials used v0.3.0
 (20711928aa3074093cdcc8080767c56b1223ae01) and the candidate commit 87b1e9e,
 unreachable since its branch was merged.
 
@@ -79,7 +82,7 @@ directly by WrapperGenerator from the cached 9.3.1 distribution.
 `VERIFY: WRAPPER` — Select and verify the live wrapper target with the tool; do
 not invent a fixed latest version. When preparing adoption, optionally add the
 official 9.3.1 binary distribution checksum.
-A wrapper-only move is not the pluginDriven exemption; if embedded dependencies
+A wrapper-only move is not a planned plugin move; if embedded dependencies
 change without a planned plugin move and verification rejects them, record a
 regression/failure rather than adding dependency declarations to bypass it.
 
@@ -87,7 +90,7 @@ regression/failure rather than adding dependency declarations to bypass it.
 ## Run acceptance and evidence (cases 8–9 and deferred majors)
 
 EXPECTED.md is the single source of expectations. README.md contains setup and
-entry commands; VALIDATION.md and REGISTRY-EVIDENCE.json contain observed evidence.
+entry commands; VALIDATION.md contains observed evidence.
 Exact live targets, advisory counts, identities and release dates depend on the
 registry snapshot. A missing or too-young eligible candidate is timing-dependent,
 not proof that the fixture or tool failed. No young release is fabricated.
@@ -96,12 +99,12 @@ Run secure-it and bump-it independently against the same seeded main revision;
 capture evidence before merging either tool's PRs. Do not merge parent updates
 before testing transitive security fixes. Preserve the seed revision externally
 for repeat trials; after merges, do not expect the same candidates/findings.
-Unchanged weeks may review already-open PRs rather than create new ones.
+Later runs on an unchanged main may review already-open PRs rather than create new ones.
 
 bump-it's default maximum is **three new major PRs per run**, in addition to the
 routine unit. An eligible major can be deferred behind higher-priority packages,
-including Actions and the new glob direct dependency. An absent wordwrap,
-annotations, setup-java or other major PR is not a bug solely because it is absent.
+including Actions. An absent java-conventions plugin, checkout, setup-java or
+other major PR is not a bug solely because it is absent.
 Check the deployed limit and each unit's status/priority; distinguish deferred,
 already-open, held, failed, no eligible candidate and notes-only dependencies.
 Capture later runs (or a deliberately configured larger limit) to exercise every
@@ -124,10 +127,10 @@ acceptance. Judge every changed resolved artifact for advisories, age and identi
 Missing registry data/inventory coverage is incomplete, never a clean pass.
 
 `VERIFY: RUN-EVIDENCE` — Confirm the deployed maxNewMajorsPerRun value and retain
-all fields and failed-unit artifacts above in the next weekly report. Reconcile
+all fields and failed-unit artifacts above in the next candidate-pass report. Reconcile
 all cases against units, not only the published PR list.
 
-## supply-chain 0.3.0 verification
+## Gradle verification (current since supply-chain 0.3.0)
 
 | Behavior | Expected result |
 |---|---|
