@@ -1,0 +1,37 @@
+{
+  "floors": [
+    {
+      "ecosystem": "Maven",
+      "package": "org.codehaus.plexus:plexus-utils",
+      "version": "3.6.1",
+      "declaredIn": "build.gradle.kts",
+      "selector": [":checkstyle"],
+      "purpose": "security",
+      "advisories": ["GHSA-6fmv-xxpf-w3cw"],
+      "reason": "Checkstyle pulls plexus-utils 3.3.0 through doxia; floor it at the fixed release.",
+      "added": "2026-10-13"
+    },
+    {
+      "ecosystem": "Maven",
+      "package": "com.google.guava:guava",
+      "version": "33.7.2-jre",
+      "declaredIn": "build.gradle.kts",
+      "selector": [":annotationProcessor", ":checkstyle", ":testAnnotationProcessor"],
+      "purpose": "security",
+      "advisories": ["GHSA-xxph-c9ww-hj94"],
+      "reason": "Guava 33.5.0-jre reaches the annotation processors and Checkstyle; floor them at the fixed release.",
+      "added": "2026-10-13"
+    },
+    {
+      "ecosystem": "Maven",
+      "package": "org.apache.commons:commons-lang3",
+      "version": "3.18.0",
+      "declaredIn": "build.gradle.kts",
+      "selector": [":checkstyle"],
+      "purpose": "security",
+      "advisories": ["GHSA-j288-q9x7-2f5v"],
+      "reason": "Checkstyle pulls commons-lang3 3.8.1 through doxia; floor it at the fixed release.",
+      "added": "2026-10-13"
+    }
+  ]
+}
