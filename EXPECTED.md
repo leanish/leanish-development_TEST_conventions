@@ -55,8 +55,9 @@ registry outcomes, not fixed to the illustrative versions below. npm identity,
 source or provenance breaks can block an otherwise safe version.
 
 Gate trials use the same supply-chain commit for inventory and comparison.
-The gate is pinned to supply-chain v0.4.0
-(1c236638041cc479ac067b2a4b6143f0e6c2bace, 2026-10-11). It runs on pull requests,
+The gate is pinned to supply-chain v0.5.0
+(7a202ca6265cd783baee1be82fceb20ea22d47cc, 2026-10-14; v0.4.0 was
+1c236638041cc479ac067b2a4b6143f0e6c2bace, 2026-10-11). It runs on pull requests,
 pushes to main and manual dispatch. It has no schedule (removed 2026-10-12) and,
 since v0.4.0, no open-PR rescan. The tools are at v0.4.2; tool-only releases don't
 need a gate repin. Earlier trials used v0.3.0
