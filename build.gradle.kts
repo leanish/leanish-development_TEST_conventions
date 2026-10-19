@@ -12,3 +12,32 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
+// Checkstyle extends this helper: declaring the floors on checkstyle itself
+// would stop the plugin from supplying the checkstyle tool.
+val checkstyleSecurityFloors by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = false
+}
+
+configurations.named("checkstyle") {
+    extendsFrom(checkstyleSecurityFloors)
+}
+
+dependencies {
+    checkstyleSecurityFloors("org.codehaus.plexus:plexus-utils:3.6.1") {
+        because("GHSA-6fmv-xxpf-w3cw: plexus-utils below 3.6.1 allows directory traversal in extractFile; checkstyle resolved 3.3.0")
+    }
+    checkstyleSecurityFloors("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava through 33.7.1 allows uncontrolled memory allocation in CompactHashMap deserialization; checkstyle resolved 33.5.0-jre")
+    }
+    checkstyleSecurityFloors("org.apache.commons:commons-lang3:3.18.0") {
+        because("GHSA-j288-q9x7-2f5v: commons-lang3 below 3.18.0 has uncontrolled recursion on long inputs; checkstyle resolved 3.8.1")
+    }
+    annotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava through 33.7.1 allows uncontrolled memory allocation in CompactHashMap deserialization; annotation processors resolved 33.5.0-jre")
+    }
+    testAnnotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava through 33.7.1 allows uncontrolled memory allocation in CompactHashMap deserialization; test annotation processors resolved 33.5.0-jre")
+    }
+}
