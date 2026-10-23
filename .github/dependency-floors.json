@@ -1,0 +1,37 @@
+{
+  "floors": [
+    {
+      "ecosystem": "Maven",
+      "package": "org.codehaus.plexus:plexus-utils",
+      "version": "3.6.1",
+      "declaredIn": "build.gradle.kts",
+      "selector": [":checkstyle"],
+      "purpose": "security",
+      "advisories": ["GHSA-6fmv-xxpf-w3cw"],
+      "reason": "checkstyle resolves plexus-utils 3.3.0, which predates the 3.6.1 fix for a directory traversal in Expand.extractFile",
+      "added": "2026-10-23"
+    },
+    {
+      "ecosystem": "Maven",
+      "package": "com.google.guava:guava",
+      "version": "33.7.2-jre",
+      "declaredIn": "build.gradle.kts",
+      "selector": [":annotationProcessor", ":checkstyle", ":testAnnotationProcessor"],
+      "purpose": "security",
+      "advisories": ["GHSA-xxph-c9ww-hj94"],
+      "reason": "annotation processors and checkstyle resolve guava 33.5.0-jre, which eagerly allocates arrays when deserializing collections; 33.7.2-jre is the fixed version",
+      "added": "2026-10-23"
+    },
+    {
+      "ecosystem": "Maven",
+      "package": "org.apache.commons:commons-lang3",
+      "version": "3.18.0",
+      "declaredIn": "build.gradle.kts",
+      "selector": [":checkstyle"],
+      "purpose": "security",
+      "advisories": ["GHSA-j288-q9x7-2f5v"],
+      "reason": "checkstyle resolves commons-lang3 3.8.1, which recurses without bound on long ClassUtils.getClass inputs; 3.18.0 is the fixed version",
+      "added": "2026-10-23"
+    }
+  ]
+}
