@@ -12,3 +12,21 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
+val checkstyleSecurityFloors by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = false
+}
+
+configurations.named("checkstyle") {
+    extendsFrom(checkstyleSecurityFloors)
+}
+
+dependencies {
+    checkstyleSecurityFloors("org.codehaus.plexus:plexus-utils:3.6.1") {
+        because("GHSA-6fmv-xxpf-w3cw: checkstyle pulls plexus-utils 3.3.0 through doxia, below its 3.6.1 fix")
+    }
+    checkstyleSecurityFloors("org.apache.commons:commons-lang3:3.18.0") {
+        because("GHSA-j288-q9x7-2f5v: checkstyle pulls commons-lang3 3.8.1 through doxia, below its 3.18.0 fix")
+    }
+}
