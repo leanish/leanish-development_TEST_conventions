@@ -12,3 +12,21 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
+val securityFloors by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = false
+}
+
+configurations.named("checkstyle") {
+    extendsFrom(securityFloors)
+}
+
+dependencies {
+    securityFloors("org.codehaus.plexus:plexus-utils:3.6.1") {
+        because("GHSA-6fmv-xxpf-w3cw: checkstyle's transitive plexus-utils stays below the fixed release")
+    }
+    securityFloors("org.apache.commons:commons-lang3:3.18.0") {
+        because("GHSA-j288-q9x7-2f5v: checkstyle's transitive commons-lang3 stays below the fixed release")
+    }
+}
