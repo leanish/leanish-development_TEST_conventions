@@ -12,3 +12,21 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
+val checkstyleSecurityFloors by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = false
+}
+
+configurations.named("checkstyle") {
+    extendsFrom(checkstyleSecurityFloors)
+}
+
+dependencies {
+    checkstyleSecurityFloors("org.codehaus.plexus:plexus-utils:3.6.1") {
+        because("GHSA-6fmv-xxpf-w3cw: plexus-utils before 3.6.1 has a directory traversal in extractFile, reached through checkstyle")
+    }
+    checkstyleSecurityFloors("org.apache.commons:commons-lang3:3.18.0") {
+        because("GHSA-j288-q9x7-2f5v: commons-lang3 before 3.18.0 recurses without bound on long inputs, reached through checkstyle")
+    }
+}
