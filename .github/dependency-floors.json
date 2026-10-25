@@ -1,0 +1,30 @@
+{
+  "floors": [
+    {
+      "ecosystem": "Maven",
+      "package": "org.codehaus.plexus:plexus-utils",
+      "version": "3.6.1",
+      "declaredIn": "build.gradle.kts",
+      "selector": ":checkstyle",
+      "purpose": "security",
+      "advisories": [
+        "GHSA-6fmv-xxpf-w3cw"
+      ],
+      "reason": "Transitive through checkstyle; floored to the version that fixes GHSA-6fmv-xxpf-w3cw.",
+      "added": "2026-10-25"
+    },
+    {
+      "ecosystem": "Maven",
+      "package": "org.apache.commons:commons-lang3",
+      "version": "3.18.0",
+      "declaredIn": "build.gradle.kts",
+      "selector": ":checkstyle",
+      "purpose": "security",
+      "advisories": [
+        "GHSA-j288-q9x7-2f5v"
+      ],
+      "reason": "Transitive through checkstyle; floored to the version that fixes GHSA-j288-q9x7-2f5v.",
+      "added": "2026-10-25"
+    }
+  ]
+}
