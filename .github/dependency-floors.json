@@ -1,0 +1,30 @@
+{
+  "floors": [
+    {
+      "ecosystem": "Maven",
+      "package": "org.codehaus.plexus:plexus-utils",
+      "version": "3.6.1",
+      "declaredIn": "build.gradle.kts",
+      "selector": ":checkstyle",
+      "purpose": "security",
+      "advisories": [
+        "GHSA-6fmv-xxpf-w3cw"
+      ],
+      "reason": "Checkstyle pulls plexus-utils below 3.6.1, which is vulnerable to directory traversal in extractFile.",
+      "added": "2026-10-26"
+    },
+    {
+      "ecosystem": "Maven",
+      "package": "org.apache.commons:commons-lang3",
+      "version": "3.18.0",
+      "declaredIn": "build.gradle.kts",
+      "selector": ":checkstyle",
+      "purpose": "security",
+      "advisories": [
+        "GHSA-j288-q9x7-2f5v"
+      ],
+      "reason": "Checkstyle pulls commons-lang3 below 3.18.0, which is vulnerable to uncontrolled recursion on long inputs.",
+      "added": "2026-10-26"
+    }
+  ]
+}
