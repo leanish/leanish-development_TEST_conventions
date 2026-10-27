@@ -12,3 +12,21 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
+val checkstyleSecurity by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = false
+}
+
+configurations.named("checkstyle") {
+    extendsFrom(checkstyleSecurity)
+}
+
+dependencies {
+    checkstyleSecurity("org.codehaus.plexus:plexus-utils:3.6.1") {
+        because("GHSA-6fmv-xxpf-w3cw: protect Checkstyle's transitive Plexus utilities dependency")
+    }
+    checkstyleSecurity("org.apache.commons:commons-lang3:3.18.0") {
+        because("GHSA-j288-q9x7-2f5v: protect Checkstyle's transitive Commons Lang dependency")
+    }
+}
