@@ -12,3 +12,29 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
+val checkstyleSecurityFloors = configurations.create("checkstyleSecurityFloors") {
+    isCanBeResolved = false
+    isCanBeConsumed = false
+}
+configurations.named("checkstyle") {
+    extendsFrom(checkstyleSecurityFloors)
+}
+
+dependencies {
+    annotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: avoid the vulnerable Guava version")
+    }
+    testAnnotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: avoid the vulnerable Guava version")
+    }
+    add(checkstyleSecurityFloors.name, "com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: avoid the vulnerable Guava version")
+    }
+    add(checkstyleSecurityFloors.name, "org.codehaus.plexus:plexus-utils:3.6.1") {
+        because("GHSA-6fmv-xxpf-w3cw: avoid the vulnerable Plexus Utils version")
+    }
+    add(checkstyleSecurityFloors.name, "org.apache.commons:commons-lang3:3.18.0") {
+        because("GHSA-j288-q9x7-2f5v: avoid the vulnerable Commons Lang version")
+    }
+}
