@@ -12,3 +12,31 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
+// checkstyle is filled with the checkstyle tool by default, so the security floors live in a helper it extends.
+val checkstyleSecurityFloors by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = false
+}
+
+configurations.named("checkstyle") {
+    extendsFrom(checkstyleSecurityFloors)
+}
+
+dependencies {
+    annotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava CompactHashMap/CompactHashSet deserialization allocates uncontrolled memory; fixed in 33.7.2")
+    }
+    testAnnotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava CompactHashMap/CompactHashSet deserialization allocates uncontrolled memory; fixed in 33.7.2")
+    }
+    checkstyleSecurityFloors("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava CompactHashMap/CompactHashSet deserialization allocates uncontrolled memory; fixed in 33.7.2")
+    }
+    checkstyleSecurityFloors("org.codehaus.plexus:plexus-utils:3.6.1") {
+        because("GHSA-6fmv-xxpf-w3cw: plexus-utils extractFile directory traversal; fixed in 3.6.1")
+    }
+    checkstyleSecurityFloors("org.apache.commons:commons-lang3:3.18.0") {
+        because("GHSA-j288-q9x7-2f5v: commons-lang3 uncontrolled recursion on long inputs; fixed in 3.18.0")
+    }
+}
