@@ -12,3 +12,31 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
+// Declarations only: holds the checkstyle security floors without replacing the checkstyle tool the plugin provides.
+val checkstyleFloors by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = false
+}
+
+configurations.named("checkstyle") {
+    extendsFrom(checkstyleFloors)
+}
+
+dependencies {
+    annotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava 33.7.2 fixes uncontrolled memory allocation on deserialization")
+    }
+    testAnnotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava 33.7.2 fixes uncontrolled memory allocation on deserialization")
+    }
+    checkstyleFloors("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava 33.7.2 fixes uncontrolled memory allocation on deserialization")
+    }
+    checkstyleFloors("org.codehaus.plexus:plexus-utils:3.6.1") {
+        because("GHSA-6fmv-xxpf-w3cw: plexus-utils 3.6.1 fixes directory traversal in extractFile")
+    }
+    checkstyleFloors("org.apache.commons:commons-lang3:3.18.0") {
+        because("GHSA-j288-q9x7-2f5v: commons-lang3 3.18.0 fixes uncontrolled recursion on long inputs")
+    }
+}
