@@ -12,3 +12,32 @@ java {
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
+
+// Checkstyle's plugin fills the `checkstyle` configuration with its own tool only while it is empty,
+// so the security floors go into a helper configuration that `checkstyle` extends.
+val checkstyleSecurityFloors by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = false
+}
+
+configurations.named("checkstyle") {
+    extendsFrom(checkstyleSecurityFloors)
+}
+
+dependencies {
+    annotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava 33.5.0-jre is vulnerable; floor the annotation processor path at the fixed version")
+    }
+    testAnnotationProcessor("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava 33.5.0-jre is vulnerable; floor the test annotation processor path at the fixed version")
+    }
+    checkstyleSecurityFloors("com.google.guava:guava:33.7.2-jre") {
+        because("GHSA-xxph-c9ww-hj94: guava 33.5.0-jre is vulnerable; floor the Checkstyle path at the fixed version")
+    }
+    checkstyleSecurityFloors("org.codehaus.plexus:plexus-utils:3.6.1") {
+        because("GHSA-6fmv-xxpf-w3cw: plexus-utils 3.3.0 is vulnerable; floor the Checkstyle path at the fixed version")
+    }
+    checkstyleSecurityFloors("org.apache.commons:commons-lang3:3.18.0") {
+        because("GHSA-j288-q9x7-2f5v: commons-lang3 3.8.1 is vulnerable; floor the Checkstyle path at the fixed version")
+    }
+}
